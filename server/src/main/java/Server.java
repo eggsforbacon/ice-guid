@@ -5,7 +5,7 @@ import com.zeroc.Ice.Util;
 public class Server {
     public static void main(String[] args) {
         try(Communicator communicator = Util.initialize(args, "server.cfg")) {
-            ObjectAdapter adapter = communicator.createObjectAdapter("PrinterAdapter");
+            ObjectAdapter adapter = communicator.createObjectAdapter("Service");
             com.zeroc.Ice.Object iceObject = new PrinterI();
             adapter.add(iceObject, Util.stringToIdentity("Printer"));
             adapter.activate();
