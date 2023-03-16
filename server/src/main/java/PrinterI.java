@@ -10,13 +10,13 @@ public class PrinterI implements Demo.Printer {
         String promptedUUID = digest[1];
 
         if (isValidUUID(promptedUUID)) {
-            System.out.println(Colors.ANSI_GREEN.value() + Colors.ANSI_BOLD.value() + promptedUUID + Colors.ANSI_UNBOLD.value() + "VALID REQUEST" + Colors.ANSI_RESET);
-            System.out.println("-------------------------------------------\nClosest smallest prime greater than" + Colors.ANSI_YELLOW.value() + number + ":" + Colors.ANSI_RESET);
+            System.out.println(Colors.ANSI_GREEN.value() + Colors.ANSI_BOLD.value() + promptedUUID + Colors.ANSI_UNBOLD.value() + "VALID REQUEST" + Colors.ANSI_RESET.value());
+            System.out.println("-------------------------------------------\nClosest smallest prime greater than" + Colors.ANSI_YELLOW.value() + number + ":" + Colors.ANSI_RESET.value());
             final int closestPrime = getClosestPrime(number);
             System.out.println(Colors.ANSI_BOLD.value() + closestPrime + Colors.ANSI_RESET.value());
             return closestPrime;
         } else {
-            System.out.println(Colors.ANSI_RED.value() + Colors.ANSI_BOLD.value() + promptedUUID + Colors.ANSI_UNBOLD.value() + Colors.ANSI_BRIGHT_RED.value() + "INVALID REQUEST" + Colors.ANSI_RESET);
+            System.out.println(Colors.ANSI_RED.value() + Colors.ANSI_BOLD.value() + promptedUUID + Colors.ANSI_UNBOLD.value() + Colors.ANSI_BRIGHT_RED.value() + "INVALID REQUEST" + Colors.ANSI_RESET.value());
             return 1;
         }
     }

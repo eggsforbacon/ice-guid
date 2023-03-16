@@ -1,33 +1,39 @@
 import com.zeroc.Ice.Communicator;
-import com.zeroc.Ice.ObjectPrx;
 import com.zeroc.Ice.Util;
 
 import javax.management.InvalidAttributeValueException;
 import java.io.*;
-import java.util.Arrays;
 import java.util.UUID;
 
 public class Client {
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(args));
         try(Communicator communicator = Util.initialize(args, "client.cfg")) {
-            ObjectPrx basePrx = communicator.propertyToProxy("Service.Proxy");
-            Demo.PrinterPrx printerPrx = Demo.PrinterPrx.checkedCast(basePrx);
+            Demo.PrinterPrx twoway = Demo.PrinterPrx.checkedCast(
+                    communicator.propertyToProxy("Service.Proxy")).ice_twoway().ice_secure(false);
+            Demo.PrinterPrx printerPrx = twoway.ice_twoway();
 
             if (printerPrx == null) {
                 throw new Error("Invalid proxy");
             }
 
             final int length = args.length;
-            String packet = "Invalid input from client";
+            String packet = "-1,Invalid input from client";
             switch (length) {
-                default -> System.out.println("You've entered more than two arguments. Please check your input.");
-                case 0 -> System.out.println("You've entered no arguments. Please check your input.");
-                case 1 -> packet = noFile(args[0]);
-                case 2 -> packet = fromFile(args[0], args[1]);
+                default:
+                    System.out.println("You've entered more than two arguments. Please check your input.");
+                    break;
+                case 0:
+                    System.out.println("You've entered no arguments. Please check your input.");
+                    break;
+                case 1:
+                    packet = noFile(args[0]);
+                    break;
+                case 2:
+                    packet = fromFile(args[0], args[1]);
+                    break;
             }
             final int response = printerPrx.printString(packet);
-            System.out.printf("Response from server: %d", response);
+            System.out.printf("Response from server: %d%n%n", response);
         }
     }
 
@@ -43,7 +49,7 @@ public class Client {
         } catch (InvalidAttributeValueException iave) {
             System.out.printf("Value %s is not within range.%nPlease provide an integer value greater than or equal to 1%n", argument);
         }
-        return "Invalid input from client";
+        return "-1,Invalid input from client";
     }
 
     public static String fromFile(String argument1, String argument2) {
@@ -68,6 +74,6 @@ public class Client {
             System.out.println("An unknown I/O exception has occurred.\nStacktrace:\n");
             ioe.printStackTrace();
         }
-        return "Invalid input from client";
+        return "-1,Invalid input from client";
     }
 }
